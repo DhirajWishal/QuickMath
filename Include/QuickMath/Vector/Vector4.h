@@ -91,7 +91,7 @@ namespace QuickMath
 		 * @param index: The index of the data to be accessed.
 		 * @return Float value at the index.
 		 */
-		const float operator[](int index) const
+		const float operator[](unsigned int index) const
 		{
 			return (operator const float* ())[index];
 		}
@@ -102,7 +102,7 @@ namespace QuickMath
 		 * @param index: The index of the data to be accessed.
 		 * @return Float value at the index.
 		 */
-		float& operator[](int index)
+		float& operator[](unsigned int index)
 		{
 			return const_cast<float&>((operator const float* ())[index]);
 		}

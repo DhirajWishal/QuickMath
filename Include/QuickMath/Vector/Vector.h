@@ -194,13 +194,6 @@ namespace QuickMath
 	protected:
 		Vector() {}
 		~Vector() {}
-
-		/**
-		 * Construct the vector using another vector.
-		 *
-		 * @param : The other vector.
-		 */
-		Vector(const Vector&) {}
 	};
 
 	/**
@@ -212,7 +205,7 @@ namespace QuickMath
 	 * @return The added vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator+(const Vector<Type, ValueType>& lhs, const typename ValueType& rhs)
+	Vector<Type, ValueType> operator+(const Vector<Type, ValueType>& lhs, const ValueType& rhs)
 	{
 		return lhs() + Type(rhs);
 	}
@@ -226,7 +219,7 @@ namespace QuickMath
 	 * @return The added vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator+(const typename ValueType& lhs, const Vector<Type, ValueType>& rhs)
+	Vector<Type, ValueType> operator+(const ValueType& lhs, const Vector<Type, ValueType>& rhs)
 	{
 		return Type(lhs) + rhs();
 	}
@@ -240,7 +233,7 @@ namespace QuickMath
 	 * @return The subracted vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator-(const Vector<Type, ValueType>& lhs, const typename ValueType& rhs)
+	Vector<Type, ValueType> operator-(const Vector<Type, ValueType>& lhs, const ValueType& rhs)
 	{
 		return lhs() - Type(rhs);
 	}
@@ -254,7 +247,7 @@ namespace QuickMath
 	 * @return The subracted vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator-(const typename ValueType& lhs, const Vector<Type, ValueType>& rhs)
+	Vector<Type, ValueType> operator-(const ValueType& lhs, const Vector<Type, ValueType>& rhs)
 	{
 		return Type(lhs) - rhs();
 	}
@@ -268,7 +261,7 @@ namespace QuickMath
 	 * @return The multiplied vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator*(const Vector<Type, ValueType>& lhs, const typename ValueType& rhs)
+	Vector<Type, ValueType> operator*(const Vector<Type, ValueType>& lhs, const ValueType& rhs)
 	{
 		return lhs() * Type(rhs);
 	}
@@ -282,7 +275,7 @@ namespace QuickMath
 	 * @return The multiplied vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator*(const typename ValueType& lhs, const Vector<Type, ValueType>& rhs)
+	Vector<Type, ValueType> operator*(const ValueType& lhs, const Vector<Type, ValueType>& rhs)
 	{
 		return Type(lhs) * rhs();
 	}
@@ -296,7 +289,7 @@ namespace QuickMath
 	 * @return The divided vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator/(const Vector<Type, ValueType>& lhs, const typename ValueType& rhs)
+	Vector<Type, ValueType> operator/(const Vector<Type, ValueType>& lhs, const ValueType& rhs)
 	{
 		return lhs() / Type(rhs);
 	}
@@ -310,7 +303,7 @@ namespace QuickMath
 	 * @return The divided vector.
 	 */
 	template <class Type, class ValueType>
-	Vector<Type, ValueType> operator/(const typename ValueType& lhs, const Vector<Type, ValueType>& rhs)
+	Vector<Type, ValueType> operator/(const ValueType& lhs, const Vector<Type, ValueType>& rhs)
 	{
 		return Type(lhs) / rhs();
 	}
