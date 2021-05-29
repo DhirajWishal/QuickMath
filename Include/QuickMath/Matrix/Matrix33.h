@@ -7,6 +7,8 @@
 
 namespace QuickMath
 {
+	class Matrix22;
+
 	/**
 	 * Matrix 3x3 for QuickMath.
 	 */
@@ -63,7 +65,7 @@ namespace QuickMath
 			if ((list.size() > 9) || (list.size() < 9))
 				return;
 
-			std::copy(list.begin(), list.end(), this);
+			std::copy(list.begin(), list.end(), &this->x.x);
 		}
 
 		/**
@@ -89,18 +91,51 @@ namespace QuickMath
 		}
 
 		/**
+		 * Add two matrices.
+		 *
+		 * @param other: The other matrix.
+		 * @return The new matrix.
+		 */
+		Matrix33 operator+(const Matrix33& other)
+		{
+			Matrix33 newMatrix = Matrix33::Identity;
+			newMatrix.x = x + other.x;
+			newMatrix.y = y + other.y;
+			newMatrix.z = z + other.z;
+
+			return newMatrix;
+		}
+
+		/**
+		 * Subtract two matrices.
+		 *
+		 * @param other: The other matrix.
+		 * @return The new matrix.
+		 */
+		Matrix33 operator-(const Matrix33& other)
+		{
+			Matrix33 newMatrix = Matrix33::Identity;
+			newMatrix.x = x - other.x;
+			newMatrix.y = y - other.y;
+			newMatrix.z = z - other.z;
+
+			return newMatrix;
+		}
+
+		/**
 		 * Multiply the matrix by a value.
 		 *
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix33& operator*(const float& value)
+		Matrix33 operator*(const float& value)
 		{
-			r *= value;
-			g *= value;
-			b *= value;
+			Matrix33 newMatrix = Matrix33::Identity;
+			newMatrix.r = r * value;
+			newMatrix.g = g * value;
+			newMatrix.b = b * value;
 
-			return *this;
+			return newMatrix;
 		}
 
 		/**
@@ -125,13 +160,87 @@ namespace QuickMath
 		 * @param other: The other matrix to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix33& operator*(const Matrix33& other)
+		Matrix33 operator*(const Matrix33& other)
 		{
-			r = (r * other[0][0]) + (g * other[0][1]) + (b * other[0][2]);
-			g = (r * other[1][0]) + (g * other[1][1]) + (b * other[1][2]);
-			b = (r * other[2][0]) + (g * other[2][1]) + (b * other[2][2]);
+			Matrix33 newMatrix = Matrix33::Identity;
+			newMatrix.r = (r * other[0][0]) + (g * other[0][1]) + (b * other[0][2]);
+			newMatrix.g = (r * other[1][0]) + (g * other[1][1]) + (b * other[1][2]);
+			newMatrix.b = (r * other[2][0]) + (g * other[2][1]) + (b * other[2][2]);
 
-			return *this;
+			return newMatrix;
+		}
+
+		/**
+		 * Divide the matrix by a value.
+		 *
+		 * @param value: The value to be multiplied with.
+		 * @return The divided matrix.
+		 */
+		Matrix33 operator/(const float& value)
+		{
+			Matrix33 newMatrix = Matrix33::Identity;
+			newMatrix.r = r / value;
+			newMatrix.g = g / value;
+			newMatrix.b = b / value;
+
+			return newMatrix;
+		}
+
+		/**
+		 * Get the transposed matrix of this.
+		 *
+		 * @return The transposed matrix.
+		 */
+		Matrix33 Transpose() const
+		{
+			return Matrix33(x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z);
+		}
+
+		/**
+		 * Get the determinant of the matrix.
+		 *
+		 * @return The determinant value.
+		 */
+		float Determinant() const
+		{
+			float a = x.x * Matrix22(y.y, y.z, z.y, z.z).Determinant();
+			float b = x.y * Matrix22(y.x, y.z, z.x, z.z).Determinant();
+			float c = x.z * Matrix22(y.x, y.y, z.x, z.y).Determinant();
+
+			return a - b + c;
+		}
+
+		/**
+		 * Get the adjugate matrix of the current matrix (Adj(x)).
+		 *
+		 * @return The matrix.
+		 */
+		Matrix33 Adjugate() const
+		{
+			float a = Matrix22(y.y, y.z, z.y, z.z).Determinant();
+			float b = -Matrix22(x.y, x.z, z.y, z.z).Determinant();
+			float c = Matrix22(x.y, x.z, y.y, y.z).Determinant();
+
+			float d = -Matrix22(y.x, y.z, z.x, z.z).Determinant();
+			float e = Matrix22(x.x, x.z, z.x, z.z).Determinant();
+			float f = -Matrix22(x.x, x.z, y.x, y.z).Determinant();
+
+			float g = Matrix22(y.x, y.y, z.x, z.y).Determinant();
+			float h = -Matrix22(x.x, x.y, z.x, z.y).Determinant();
+			float i = Matrix22(x.x, x.y, y.x, y.y).Determinant();
+
+			return Matrix33(a, b, c, d, e, f, g, h, i);
+		}
+
+		/**
+		 * Get the inverse matrix of the current matrix.
+		 *
+		 * @return The inverse matrix.
+		 */
+		Matrix33 Inverse() const
+		{
+			float a = 1.0f / Determinant();
+			return Adjugate() * a;
 		}
 
 	public:

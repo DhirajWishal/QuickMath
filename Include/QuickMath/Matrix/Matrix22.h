@@ -52,7 +52,7 @@ namespace QuickMath
 			if ((list.size() > 4) || (list.size() < 4))
 				return;
 
-			std::copy(list.begin(), list.end(), this);
+			std::copy(list.begin(), list.end(), &this->x.x);
 		}
 
 		/**
@@ -78,17 +78,48 @@ namespace QuickMath
 		}
 
 		/**
+		 * Add two matrices.
+		 *
+		 * @param other: The other matrix.
+		 * @return The new matrix.
+		 */
+		Matrix22 operator+(const Matrix22& other)
+		{
+			Matrix22 newMatrix = Matrix22::Identity;
+			newMatrix.x = x + other.x;
+			newMatrix.y = y + other.y;
+
+			return newMatrix;
+		}
+
+		/**
+		 * Subtract two matrices.
+		 *
+		 * @param other: The other matrix.
+		 * @return The new matrix.
+		 */
+		Matrix22 operator-(const Matrix22& other)
+		{
+			Matrix22 newMatrix = Matrix22::Identity;
+			newMatrix.x = x - other.x;
+			newMatrix.y = y - other.y;
+
+			return newMatrix;
+		}
+
+		/**
 		 * Multiply the matrix by a value.
 		 *
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix22& operator*(const float& value)
+		Matrix22 operator*(const float& value)
 		{
-			r *= value;
-			g *= value;
+			Matrix22 newMatrix = Matrix22::Identity;
+			newMatrix.r = r * value;
+			newMatrix.g = g * value;
 
-			return *this;
+			return newMatrix;
 		}
 
 		/**
@@ -109,12 +140,69 @@ namespace QuickMath
 		 * @param other: The other matrix to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix22& operator*(const Matrix22& other)
+		Matrix22 operator*(const Matrix22& other)
 		{
-			r = (x * other[0][0]) + (y * other[0][1]);
-			g = (x * other[1][0]) + (y * other[1][1]);
+			Matrix22 newMatrix = Matrix22::Identity;
+			newMatrix.r = (x * other[0][0]) + (y * other[0][1]);
+			newMatrix.g = (x * other[1][0]) + (y * other[1][1]);
 
-			return *this;
+			return newMatrix;
+		}
+
+		/**
+		 * Divide the matrix by a value.
+		 *
+		 * @param value: The value to be multiplied with.
+		 * @return The divided matrix.
+		 */
+		Matrix22 operator/(const float& value)
+		{
+			Matrix22 newMatrix = Matrix22::Identity;
+			newMatrix.r = r / value;
+			newMatrix.g = g / value;
+
+			return newMatrix;
+		}
+
+		/**
+		 * Get the transposed matrix of this.
+		 *
+		 * @return The transposed matrix.
+		 */
+		Matrix22 Transpose() const
+		{
+			return Matrix22(x.x, y.x, x.y, y.y);
+		}
+
+		/**
+		 * Get the determinant of the matrix.
+		 *
+		 * @return The determinant value.
+		 */
+		float Determinant() const
+		{
+			return (x.x * y.y) - (x.y * y.x);
+		}
+
+		/**
+		 * Get the adjugate matrix of the current matrix (Adj(x)).
+		 *
+		 * @return The matrix.
+		 */
+		Matrix22 Adjugate() const
+		{
+			return Matrix22(y.y, -x.y, -y.x, x.x);
+		}
+
+		/**
+		 * Get the inverse matrix of the current matrix.
+		 *
+		 * @return The inverse matrix.
+		 */
+		Matrix22 Inverse() const
+		{
+			float a = 1.0f / Determinant();
+			return Adjugate() * a;
 		}
 
 	public:

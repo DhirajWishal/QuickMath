@@ -7,6 +7,8 @@
 
 namespace QuickMath
 {
+	class Matrix33;
+
 	/**
 	 * Matrix 4x4 for QuickMath.
 	 */
@@ -74,7 +76,7 @@ namespace QuickMath
 			if ((list.size() > 16) || (list.size() < 16))
 				return;
 
-			std::copy(list.begin(), list.end(), this);
+			std::copy(list.begin(), list.end(), &this->x.x);
 		}
 
 		/**
@@ -100,19 +102,52 @@ namespace QuickMath
 		}
 
 		/**
+		 * Add two matrices.
+		 *
+		 * @param other: The other matrix.
+		 * @return The new matrix.
+		 */
+		Matrix44 operator+(const Matrix44& other)
+		{
+			Matrix44 newMatrix = Matrix44::Identity;
+			newMatrix.x = x + other.x;
+			newMatrix.y = y + other.y;
+			newMatrix.z = z + other.z;
+
+			return newMatrix;
+		}
+
+		/**
+		 * Subtract two matrices.
+		 *
+		 * @param other: The other matrix.
+		 * @return The new matrix.
+		 */
+		Matrix44 operator-(const Matrix44& other)
+		{
+			Matrix44 newMatrix = Matrix44::Identity;
+			newMatrix.x = x - other.x;
+			newMatrix.y = y - other.y;
+			newMatrix.z = z - other.z;
+
+			return newMatrix;
+		}
+
+		/**
 		 * Multiply the matrix by a value.
 		 *
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix44& operator*(const float& value)
+		Matrix44 operator*(const float& value)
 		{
-			r *= value;
-			g *= value;
-			b *= value;
-			a *= value;
+			Matrix44 newMatrix = Matrix44::Identity;
+			newMatrix.r = r * value;
+			newMatrix.g = g * value;
+			newMatrix.b = b * value;
+			newMatrix.a = a * value;
 
-			return *this;
+			return newMatrix;
 		}
 
 		/**
@@ -138,14 +173,98 @@ namespace QuickMath
 		 * @param other: The other matrix to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix44& operator*(const Matrix44& other)
+		Matrix44 operator*(const Matrix44& other)
 		{
-			r = (r * other[0][0]) + (g * other[0][1]) + (b * other[0][2]) + (a * other[0][3]);
-			g = (r * other[1][0]) + (g * other[1][1]) + (b * other[1][2]) + (a * other[1][3]);
-			b = (r * other[2][0]) + (g * other[2][1]) + (b * other[2][2]) + (a * other[2][3]);
-			a = (r * other[3][0]) + (g * other[3][1]) + (b * other[3][2]) + (a * other[3][3]);
+			Matrix44 newMatrix = Matrix44::Identity;
+			newMatrix.r = (r * other[0][0]) + (g * other[0][1]) + (b * other[0][2]) + (a * other[0][3]);
+			newMatrix.g = (r * other[1][0]) + (g * other[1][1]) + (b * other[1][2]) + (a * other[1][3]);
+			newMatrix.b = (r * other[2][0]) + (g * other[2][1]) + (b * other[2][2]) + (a * other[2][3]);
+			newMatrix.a = (r * other[3][0]) + (g * other[3][1]) + (b * other[3][2]) + (a * other[3][3]);
 
-			return *this;
+			return newMatrix;
+		}
+
+		/**
+		 * Divide the matrix by a value.
+		 *
+		 * @param value: The value to be multiplied with.
+		 * @return The divided matrix.
+		 */
+		Matrix44 operator/(const float& value)
+		{
+			Matrix44 newMatrix = Matrix44::Identity;
+			newMatrix.r = r / value;
+			newMatrix.g = g / value;
+			newMatrix.b = b / value;
+			newMatrix.a = a / value;
+
+			return newMatrix;
+		}
+
+		/**
+		 * Get the transposed matrix of this.
+		 *
+		 * @return The transposed matrix.
+		 */
+		Matrix44 Transpose() const
+		{
+			return Matrix44(x.x, y.x, z.x, w.x, x.y, y.y, z.y, w.y, x.z, y.z, z.z, w.z, x.w, y.w, z.w, w.w);
+		}
+
+		/**
+		 * Get the determinant of the matrix.
+		 *
+		 * @return The determinant value.
+		 */
+		float Determinant() const
+		{
+			float a = x.x * Matrix33(y.y, y.z, y.w, z.y, z.z, z.w, w.y, w.z, w.w).Determinant();
+			float b = x.y * Matrix33(y.x, y.z, y.w, z.x, z.z, z.w, w.x, w.z, w.w).Determinant();
+			float c = x.y * Matrix33(y.x, y.y, y.w, z.x, z.y, z.w, w.x, w.y, w.w).Determinant();
+			float d = x.y * Matrix33(y.x, y.y, y.z, z.x, z.y, z.z, w.x, w.y, w.z).Determinant();
+
+			return a - b + c - d;
+		}
+
+		/**
+		 * Get the adjugate matrix of the current matrix (Adj(x)).
+		 *
+		 * @return The matrix.
+		 */
+		Matrix44 Adjugate() const
+		{
+			float a = Matrix33(y.y, y.z, y.w, z.y, z.z, z.w, w.y, w.z, w.w).Determinant();
+			float b = Matrix33(y.x, y.z, y.w, z.x, z.z, z.w, w.x, w.z, w.w).Determinant();
+			float c = Matrix33(y.x, y.y, y.w, z.x, z.y, z.w, w.x, w.y, w.w).Determinant();
+			float d = Matrix33(y.x, y.y, y.z, z.x, z.y, z.z, w.x, w.y, w.z).Determinant();
+
+			float e = Matrix33(x.y, x.z, x.w, z.y, z.z, z.w, w.y, w.z, w.w).Determinant();
+			float f = Matrix33(x.x, x.z, x.w, z.x, z.z, z.w, w.x, w.z, w.w).Determinant();
+			float g = Matrix33(x.x, x.y, x.w, z.x, z.y, z.w, w.x, w.y, w.w).Determinant();
+			float h = Matrix33(x.x, x.y, x.z, z.x, z.y, z.z, w.x, w.y, w.z).Determinant();
+
+			float i = Matrix33(x.y, x.z, x.w, y.y, y.z, y.w, w.y, w.z, w.w).Determinant();
+			float j = Matrix33(x.x, x.z, x.w, y.x, y.z, y.w, w.x, w.z, w.w).Determinant();
+			float k = Matrix33(x.x, x.y, x.w, y.x, y.y, y.w, w.x, w.y, w.w).Determinant();
+			float l = Matrix33(x.x, x.y, x.z, y.x, y.y, y.z, w.x, w.y, w.z).Determinant();
+
+			float m = Matrix33(x.y, x.z, x.w, y.y, y.z, y.w, z.y, z.z, z.w).Determinant();
+			float n = Matrix33(x.x, x.z, x.w, y.x, y.z, y.w, z.x, z.z, z.w).Determinant();
+			float o = Matrix33(x.x, x.y, x.w, y.x, y.y, y.w, z.x, z.y, z.w).Determinant();
+			float p = Matrix33(x.x, x.y, x.z, y.x, y.y, y.z, z.x, z.y, z.z).Determinant();
+
+			return Matrix44(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p);
+		}
+
+		/**
+		 * Get the inverse matrix of the current matrix.
+		 *
+		 * @return The inverse matrix.
+		 */
+		Matrix44 Inverse() const
+		{
+			float a = 1.0f / Determinant();
+			return Adjugate() * a;
 		}
 
 	public:

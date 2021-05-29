@@ -42,43 +42,6 @@ namespace QuickMath
 		}
 
 		/**
-		 * Increment operator.
-		 *
-		 * @param rhs: The other primitive matrix data.
-		 * @return The incremented matrix.
-		 */
-		Type& operator+=(const ValueType& rhs)
-		{
-			(*this)() = (*this)() + Type(rhs);
-			return (*this)();
-		}
-
-		/**
-		 * Increment operator (by one).
-		 *
-		 * @param :
-		 * @return The incremented matrix.
-		 */
-		Type operator++(int)
-		{
-			Type tmp = (*this)();
-			(*this) += ValueType(1);
-			return tmp;
-		}
-
-		/**
-		 * Increment operator (by one).
-		 *
-		 * @param :
-		 * @return The incremented matrix.
-		 */
-		Type& operator++()
-		{
-			(*this)() += ValueType(1);
-			return (*this)();
-		}
-
-		/**
 		 * The decrement operator.
 		 *
 		 * @param rhs: The other matrix to be decremented by.
@@ -86,44 +49,7 @@ namespace QuickMath
 		 */
 		Type& operator-=(const Type& rhs)
 		{
-			(*this)() = (*this)() + rhs;
-			return (*this)();
-		}
-
-		/**
-		 * The decrement operator.
-		 *
-		 * @param rhs: The other matrix to be decremented by.
-		 * @return The decremented matrix.
-		 */
-		Type& operator-=(const ValueType& rhs)
-		{
-			(*this)() = (*this)() + Type(rhs);
-			return (*this)();
-		}
-
-		/**
-		 * Decrement operator (by one).
-		 *
-		 * @param :
-		 * @return The decremented matrix.
-		 */
-		Type operator--(int)
-		{
-			Type tmp = (*this)();
-			(*this) -= ValueType(1);
-			return tmp;
-		}
-
-		/**
-		 * Decrement operator (by one).
-		 *
-		 * @param :
-		 * @return The decremented matrix.
-		 */
-		Type& operator--()
-		{
-			(*this)() -= ValueType(1);
+			(*this)() = (*this)() - rhs;
 			return (*this)();
 		}
 
@@ -187,16 +113,13 @@ namespace QuickMath
 		 * Initialize as an identity matrix.
 		 */
 		static Type Identity;
-
-	protected:
-		Matrix() {}
-		~Matrix() {}
 	};
 
 	/**
 	 * Addition operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The added matrix.
@@ -211,6 +134,7 @@ namespace QuickMath
 	 * Addition operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The added matrix.
@@ -225,6 +149,7 @@ namespace QuickMath
 	 * Subtract operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The subtracted matrix.
@@ -239,6 +164,7 @@ namespace QuickMath
 	 * Subtract operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The subtracted matrix.
@@ -253,6 +179,7 @@ namespace QuickMath
 	 * Multiply operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The multiplied matrix.
@@ -267,6 +194,7 @@ namespace QuickMath
 	 * Multiply operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The multiplied matrix.
@@ -281,6 +209,7 @@ namespace QuickMath
 	 * Divide operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The divided matrix.
@@ -295,6 +224,7 @@ namespace QuickMath
 	 * Divide operator of the matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The divided matrix.
@@ -309,6 +239,7 @@ namespace QuickMath
 	 * Initialize the matrix as an identity matrix.
 	 *
 	 * @tparam Type: The type of the matrix.
+	 * @tparam ValueType: The primitive value type.
 	 */
 	template<class Type, class ValueType>
 	Type Matrix<Type, ValueType>::Identity = Type(1.0f);

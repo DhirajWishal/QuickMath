@@ -13,6 +13,7 @@ namespace QuickMath
 	 * This class contains all the common methods and operators all the other vectors contain.
 	 *
 	 * @tparam Type: Vector Type.
+	 * @tparam ValueType: The primitive value type.
 	 */
 	template <class Type, class ValueType>
 	class Vector
@@ -190,16 +191,13 @@ namespace QuickMath
 		 * Initialize the vector with 0.
 		 */
 		static Type Zero;
-
-	protected:
-		Vector() {}
-		~Vector() {}
 	};
 
 	/**
 	 * Addition operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The added vector.
@@ -214,6 +212,7 @@ namespace QuickMath
 	 * Addition operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The added vector.
@@ -228,9 +227,10 @@ namespace QuickMath
 	 * Subtract operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
-	 * @return The subracted vector.
+	 * @return The subtracted vector.
 	 */
 	template <class Type, class ValueType>
 	Vector<Type, ValueType> operator-(const Vector<Type, ValueType>& lhs, const ValueType& rhs)
@@ -242,9 +242,10 @@ namespace QuickMath
 	 * Subtract operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
-	 * @return The subracted vector.
+	 * @return The subtracted vector.
 	 */
 	template <class Type, class ValueType>
 	Vector<Type, ValueType> operator-(const ValueType& lhs, const Vector<Type, ValueType>& rhs)
@@ -256,6 +257,7 @@ namespace QuickMath
 	 * Multiply operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The multiplied vector.
@@ -270,6 +272,7 @@ namespace QuickMath
 	 * Multiply operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The multiplied vector.
@@ -284,6 +287,7 @@ namespace QuickMath
 	 * Divide operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The divided vector.
@@ -298,6 +302,7 @@ namespace QuickMath
 	 * Divide operator of the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 * @param lhs: LHS argument.
 	 * @param rhs: RHS argument.
 	 * @return The divided vector.
@@ -312,6 +317,7 @@ namespace QuickMath
 	 * Zero all the values in the vector.
 	 *
 	 * @tparam Type: The type of the vector.
+	 * @tparam ValueType: The primitive value type.
 	 */
 	template <class Type, class ValueType>
 	Type Vector<Type, ValueType>::Zero = Type(0.0f);
