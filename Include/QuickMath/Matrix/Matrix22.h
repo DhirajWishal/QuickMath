@@ -3,24 +3,26 @@
 #pragma once
 
 #include "Matrix.h"
-#include "../Vector/Vector2.h"
 
 namespace QuickMath
 {
 	/**
 	 * Matrix 2x2 for QuickMath.
 	 */
-	class Matrix22 final : public Matrix<Matrix22, float>
+	template<class Primitive>
+	class Matrix22 final : public Matrix<Matrix22<Primitive>, Primitive>
 	{
+		using Vector2 = TVector<Primitive, 2>;
+
 	public:
-		Matrix22() : x(0.0f), y(0.0f) {}
+		Matrix22() : x(Primitive()), y(Primitive()) {}
 
 		/**
 		 * Construct the matrix using one value.
 		 *
 		 * @param value: The value to be constructed with.
 		 */
-		Matrix22(float value) :x(value, 0.0f), y(0.0f, value) {}
+		Matrix22(Primitive value) :x({ value, Primitive() }), y({ Primitive(), value }) {}
 
 		/**
 		 * Set values to the matrix using two 2D vectors.
@@ -39,31 +41,20 @@ namespace QuickMath
 		 * @param d: Value to be set to w.
 		 */
 		Matrix22(
-			float a, float b,
-			float c, float d) : x(a, b), y(c, d) {}
+			Primitive a, Primitive b,
+			Primitive c, Primitive d) : x({ a, b }), y({ c, d }) {}
 
 		/**
 		 * Construct the matrix using an initializer list.
 		 *
 		 * @param list: The initializer list.
 		 */
-		Matrix22(std::initializer_list<float> list) : x(0.0f), y(0.0f)
+		Matrix22(const std::initializer_list<Primitive>& list) : x(Primitive()), y(Primitive())
 		{
 			if ((list.size() > 4) || (list.size() < 4))
 				return;
 
-			std::copy(list.begin(), list.end(), &this->x.x);
-		}
-
-		/**
-		 * Get a row of the matrix using the index.
-		 *
-		 * @param index: The index of the row.
-		 * @return The requested row.
-		 */
-		const Vector2 operator[](int index) const
-		{
-			return (&r)[index];
+			std::copy(list.begin(), list.end(), &this->x[0]);
 		}
 
 		/**
@@ -78,6 +69,17 @@ namespace QuickMath
 		}
 
 		/**
+		 * Get a row of the matrix using the index.
+		 *
+		 * @param index: The index of the row.
+		 * @return The requested row.
+		 */
+		const Vector2 operator[](int index) const
+		{
+			return (&r)[index];
+		}
+
+		/**
 		 * Add two matrices.
 		 *
 		 * @param other: The other matrix.
@@ -86,8 +88,8 @@ namespace QuickMath
 		Matrix22 operator+(const Matrix22& other) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
-			newMatrix.x = x + other.x;
-			newMatrix.y = y + other.y;
+			newMatrix[0] = x + other[0];
+			newMatrix[1] = y + other[1];
 
 			return newMatrix;
 		}
@@ -101,8 +103,8 @@ namespace QuickMath
 		Matrix22 operator-(const Matrix22& other) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
-			newMatrix.x = x - other.x;
-			newMatrix.y = y - other.y;
+			newMatrix[0] = x - other[0];
+			newMatrix[1] = y - other[1];
 
 			return newMatrix;
 		}
@@ -113,7 +115,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix22 operator*(const float& value) const
+		Matrix22 operator*(const Primitive& value) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
 			newMatrix.r = r * value;
@@ -131,7 +133,7 @@ namespace QuickMath
 		 */
 		Vector2 operator*(const Vector2& other) const
 		{
-			return { (r.x * other.x) + (r.y * other.y), (g.x * other.x) + (g.y * other.y) };
+			return { (r[0] * other[0]) + (r[1] * other[1]), (g[0] * other[0]) + (g[1] * other[1]) };
 		}
 
 		/**
@@ -143,8 +145,8 @@ namespace QuickMath
 		Matrix22 operator*(const Matrix22& other) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
-			newMatrix.r = (x * other.x.x) + (y * other.x.y);
-			newMatrix.g = (x * other.y.x) + (y * other.y.y);
+			newMatrix.r = (x * other[0][0]) + (y * other[0][1]);
+			newMatrix.g = (x * other[1][0]) + (y * other[1][1]);
 
 			return newMatrix;
 		}
@@ -155,7 +157,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The divided matrix.
 		 */
-		Matrix22 operator/(const float& value) const
+		Matrix22 operator/(const Primitive& value) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
 			newMatrix.r = r / value;
@@ -183,7 +185,7 @@ namespace QuickMath
 		 */
 		Vector2 Column(unsigned int index) const
 		{
-			return Vector2(r[index], g[index]);
+			return { r[index], g[index] };
 		}
 
 		/**
@@ -201,9 +203,9 @@ namespace QuickMath
 		 *
 		 * @return The determinant value.
 		 */
-		float Determinant() const
+		Primitive Determinant() const
 		{
-			return (x.x * y.y) - (x.y * y.x);
+			return (x[0] * y[1]) - (x[1] * y[0]);
 		}
 
 		/**
@@ -213,7 +215,7 @@ namespace QuickMath
 		 */
 		Matrix22 Adjugate() const
 		{
-			return Matrix22(y.y, -x.y, -y.x, x.x);
+			return Matrix22(y[1], -x[1], -y[0], x[0]);
 		}
 
 		/**
@@ -223,7 +225,7 @@ namespace QuickMath
 		 */
 		Matrix22 Inverse() const
 		{
-			float a = 1.0f / Determinant();
+			Primitive a = Primitive(1) / Determinant();
 			return Adjugate() * a;
 		}
 
@@ -241,4 +243,8 @@ namespace QuickMath
 			};
 		};
 	};
+
+	typedef Matrix22<float>		Matrix22f;
+	typedef Matrix22<int>		Matrix22i;
+	typedef Matrix22<double>	Matrix22d;
 }

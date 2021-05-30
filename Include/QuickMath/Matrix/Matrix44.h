@@ -2,31 +2,32 @@
 
 #pragma once
 
-#include "Matrix.h"
-#include "../Vector/Vector4.h"
+#include "Matrix33.h"
 
 namespace QuickMath
 {
-	class Matrix33;
-
 	/**
 	 * Matrix 4x4 for QuickMath.
 	 */
-	class Matrix44 final : public Matrix<Matrix44, float>
+	template<class Primitive>
+	class Matrix44 final : public Matrix<Matrix44<Primitive>, Primitive>
 	{
+		using Vector4 = TVector<Primitive, 4>;
+		using Matrix33 = Matrix33<Primitive>;
+
 	public:
-		Matrix44() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {}
+		Matrix44() : r(Primitive()), g(Primitive()), b(Primitive()), a(Primitive()) {}
 
 		/**
 		 * Construct the matrix using a value.
 		 *
 		 * @param value: The value to construct the matrix with.
 		 */
-		Matrix44(float value) :
-			r(value, 0.0f, 0.0f, 0.0f),
-			g(0.0f, value, 0.0f, 0.0f),
-			b(0.0f, 0.0f, value, 0.0f),
-			a(0.0f, 0.0f, 0.0f, value) {}
+		Matrix44(Primitive value) :
+			r({ value, Primitive(), Primitive(), Primitive() }),
+			g({ Primitive(), value, Primitive(), Primitive() }),
+			b({ Primitive(), Primitive(), value, Primitive() }),
+			a({ Primitive(), Primitive(), Primitive(), value }) {}
 
 		/**
 		 * Construct the matrix using 4 4D vectors.
@@ -41,53 +42,42 @@ namespace QuickMath
 		/**
 		 * Construct the matrix using individual values.
 		 *
-		 * @param a: Value to be set to r.r.
-		 * @param b: Value to be set to r.g.
-		 * @param c: Value to be set to r.b.
-		 * @param d: Value to be set to r.a.
-		 * @param e: Value to be set to g.r.
-		 * @param f: Value to be set to g.g.
-		 * @param g: Value to be set to g.b.
-		 * @param h: Value to be set to g.a.
-		 * @param i: Value to be set to b.r.
-		 * @param j: Value to be set to b.g.
-		 * @param k: Value to be set to b.b.
-		 * @param l: Value to be set to b.a.
-		 * @param m: Value to be set to a.r.
-		 * @param n: Value to be set to a.g.
-		 * @param o: Value to be set to a.b.
-		 * @param p: Value to be set to a.a.
+		 * @param a: Value to be set to r[0].
+		 * @param b: Value to be set to r[1].
+		 * @param c: Value to be set to r[2].
+		 * @param d: Value to be set to r[3].
+		 * @param e: Value to be set to g[0].
+		 * @param f: Value to be set to g[1].
+		 * @param g: Value to be set to g[2].
+		 * @param h: Value to be set to g[3].
+		 * @param i: Value to be set to b[0].
+		 * @param j: Value to be set to b[1].
+		 * @param k: Value to be set to b[2].
+		 * @param l: Value to be set to b[3].
+		 * @param m: Value to be set to a[0].
+		 * @param n: Value to be set to a[1].
+		 * @param o: Value to be set to a[2].
+		 * @param p: Value to be set to a[3].
 		 */
 		Matrix44(
-			float a, float b, float c, float d,
-			float e, float f, float g, float h,
-			float i, float j, float k, float l,
-			float m, float n, float o, float p)
-			: r(a, b, c, d), g(e, f, g, h), b(i, j, k, l), a(m, n, o, p) {}
+			Primitive a, Primitive b, Primitive c, Primitive d,
+			Primitive e, Primitive f, Primitive g, Primitive h,
+			Primitive i, Primitive j, Primitive k, Primitive l,
+			Primitive m, Primitive n, Primitive o, Primitive p)
+			: r({ a, b, c, d }), g({ e, f, g, h }), b({ i, j, k, l }), a({ m, n, o, p }) {}
 
 		/**
 		 * Construct the matrix using an initializer list.
 		 *
 		 * @param list: The initialize list.
 		 */
-		Matrix44(std::initializer_list<float> list)
-			: r(0.0f), g(0.0f), b(0.0f), a(0.0f)
+		Matrix44(const std::initializer_list<Primitive>& list)
+			: r(Primitive()), g(Primitive()), b(Primitive()), a(Primitive())
 		{
 			if ((list.size() > 16) || (list.size() < 16))
 				return;
 
-			std::copy(list.begin(), list.end(), &this->x.x);
-		}
-
-		/**
-		 * Retrieve a row using the index.
-		 *
-		 * @param index: The index of the row.
-		 * @return Vector 4D row.
-		 */
-		const Vector4 operator[](unsigned int index) const
-		{
-			return (&r)[index];
+			std::copy(list.begin(), list.end(), &this->x[0]);
 		}
 
 		/**
@@ -102,6 +92,17 @@ namespace QuickMath
 		}
 
 		/**
+		 * Retrieve a row using the index.
+		 *
+		 * @param index: The index of the row.
+		 * @return Vector 4D row.
+		 */
+		const Vector4 operator[](unsigned int index) const
+		{
+			return (&r)[index];
+		}
+
+		/**
 		 * Add two matrices.
 		 *
 		 * @param other: The other matrix.
@@ -110,9 +111,9 @@ namespace QuickMath
 		Matrix44 operator+(const Matrix44& other) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
-			newMatrix.x = x + other.x;
-			newMatrix.y = y + other.y;
-			newMatrix.z = z + other.z;
+			newMatrix[0] = x + other[0];
+			newMatrix[1] = y + other[1];
+			newMatrix[2] = z + other[2];
 
 			return newMatrix;
 		}
@@ -126,9 +127,9 @@ namespace QuickMath
 		Matrix44 operator-(const Matrix44& other) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
-			newMatrix.x = x - other.x;
-			newMatrix.y = y - other.y;
-			newMatrix.z = z - other.z;
+			newMatrix[0] = x - other[0];
+			newMatrix[1] = y - other[1];
+			newMatrix[2] = z - other[2];
 
 			return newMatrix;
 		}
@@ -139,13 +140,13 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix44 operator*(const float& value) const
+		Matrix44 operator*(const Primitive& value) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
-			newMatrix.r = r * value;
-			newMatrix.g = g * value;
-			newMatrix.b = b * value;
-			newMatrix.a = a * value;
+			newMatrix[0] = r * value;
+			newMatrix[1] = g * value;
+			newMatrix[2] = b * value;
+			newMatrix[3] = a * value;
 
 			return newMatrix;
 		}
@@ -159,7 +160,7 @@ namespace QuickMath
 		 */
 		Vector4 operator*(const Vector4& other) const
 		{
-			return (Vector4(r.x, g.x, b.x, a.x) * other.x) + (Vector4(r.y, g.y, b.y, a.y) * other.y) + (Vector4(r.z, g.z, b.z, a.z) * other.z) + (Vector4(r.w, g.w, b.w, a.w) * other.w);
+			return (Vector4({ r[0], g[0], b[0], a[0] }) * other[0]) + (Vector4({ r[1], g[1], b[1], a[1] }) * other[1]) + (Vector4({ r[2], g[2], b[2], a[2] }) * other[2]) + (Vector4({ r[3], g[3], b[3], a[3] }) * other[3]);
 		}
 
 		/**
@@ -171,10 +172,10 @@ namespace QuickMath
 		Matrix44 operator*(const Matrix44& other) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
-			newMatrix.r = (r * other.x.x) + (g * other.x.y) + (b * other.x.z) + (a * other.x.w);
-			newMatrix.g = (r * other.y.x) + (g * other.y.y) + (b * other.y.z) + (a * other.y.w);
-			newMatrix.b = (r * other.z.x) + (g * other.z.y) + (b * other.z.z) + (a * other.z.w);
-			newMatrix.a = (r * other.w.x) + (g * other.w.y) + (b * other.w.z) + (a * other.w.w);
+			newMatrix[0] = (r * other[0][0]) + (g * other[0][1]) + (b * other[0][2]) + (a * other[0][3]);
+			newMatrix[1] = (r * other[1][0]) + (g * other[1][1]) + (b * other[1][2]) + (a * other[1][3]);
+			newMatrix[2] = (r * other[2][0]) + (g * other[2][1]) + (b * other[2][2]) + (a * other[2][3]);
+			newMatrix[3] = (r * other[3][0]) + (g * other[3][1]) + (b * other[3][2]) + (a * other[3][3]);
 
 			return newMatrix;
 		}
@@ -185,13 +186,13 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The divided matrix.
 		 */
-		Matrix44 operator/(const float& value) const
+		Matrix44 operator/(const Primitive& value) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
-			newMatrix.r = r / value;
-			newMatrix.g = g / value;
-			newMatrix.b = b / value;
-			newMatrix.a = a / value;
+			newMatrix[0] = r / value;
+			newMatrix[1] = g / value;
+			newMatrix[2] = b / value;
+			newMatrix[3] = a / value;
 
 			return newMatrix;
 		}
@@ -215,7 +216,7 @@ namespace QuickMath
 		 */
 		Vector4 Column(unsigned int index) const
 		{
-			return Vector4(r[index], g[index], b[index], a[index]);
+			return Vector4({ r[index], g[index], b[index], a[index] });
 		}
 
 		/**
@@ -233,12 +234,12 @@ namespace QuickMath
 		 *
 		 * @return The determinant value.
 		 */
-		float Determinant() const
+		Primitive Determinant() const
 		{
-			float a = x.x * Matrix33(y.y, y.z, y.w, z.y, z.z, z.w, w.y, w.z, w.w).Determinant();
-			float b = x.y * Matrix33(y.x, y.z, y.w, z.x, z.z, z.w, w.x, w.z, w.w).Determinant();
-			float c = x.y * Matrix33(y.x, y.y, y.w, z.x, z.y, z.w, w.x, w.y, w.w).Determinant();
-			float d = x.y * Matrix33(y.x, y.y, y.z, z.x, z.y, z.z, w.x, w.y, w.z).Determinant();
+			Primitive a = x[0] * Matrix33(y[1], y[2], y[3], z[1], z[2], z[3], w[1], w[2], w[3]).Determinant();
+			Primitive b = x[1] * Matrix33(y[0], y[2], y[3], z[0], z[2], z[3], w[0], w[2], w[3]).Determinant();
+			Primitive c = x[1] * Matrix33(y[0], y[1], y[3], z[0], z[1], z[3], w[0], w[1], w[3]).Determinant();
+			Primitive d = x[1] * Matrix33(y[0], y[1], y[2], z[0], z[1], z[2], w[0], w[1], w[2]).Determinant();
 
 			return a - b + c - d;
 		}
@@ -250,25 +251,25 @@ namespace QuickMath
 		 */
 		Matrix44 Adjugate() const
 		{
-			float a = Matrix33(y.y, y.z, y.w, z.y, z.z, z.w, w.y, w.z, w.w).Determinant();
-			float b = Matrix33(y.x, y.z, y.w, z.x, z.z, z.w, w.x, w.z, w.w).Determinant();
-			float c = Matrix33(y.x, y.y, y.w, z.x, z.y, z.w, w.x, w.y, w.w).Determinant();
-			float d = Matrix33(y.x, y.y, y.z, z.x, z.y, z.z, w.x, w.y, w.z).Determinant();
+			Primitive a = Matrix33(y[1], y[2], y[3], z[1], z[2], z[3], w[1], w[2], w[3]).Determinant();
+			Primitive b = Matrix33(y[0], y[2], y[3], z[0], z[2], z[3], w[0], w[2], w[3]).Determinant();
+			Primitive c = Matrix33(y[0], y[1], y[3], z[0], z[1], z[3], w[0], w[1], w[3]).Determinant();
+			Primitive d = Matrix33(y[0], y[1], y[2], z[0], z[1], z[2], w[0], w[1], w[2]).Determinant();
 
-			float e = Matrix33(x.y, x.z, x.w, z.y, z.z, z.w, w.y, w.z, w.w).Determinant();
-			float f = Matrix33(x.x, x.z, x.w, z.x, z.z, z.w, w.x, w.z, w.w).Determinant();
-			float g = Matrix33(x.x, x.y, x.w, z.x, z.y, z.w, w.x, w.y, w.w).Determinant();
-			float h = Matrix33(x.x, x.y, x.z, z.x, z.y, z.z, w.x, w.y, w.z).Determinant();
+			Primitive e = Matrix33(x[1], x[2], x[3], z[1], z[2], z[3], w[1], w[2], w[3]).Determinant();
+			Primitive f = Matrix33(x[0], x[2], x[3], z[0], z[2], z[3], w[0], w[2], w[3]).Determinant();
+			Primitive g = Matrix33(x[0], x[1], x[3], z[0], z[1], z[3], w[0], w[1], w[3]).Determinant();
+			Primitive h = Matrix33(x[0], x[1], x[2], z[0], z[1], z[2], w[0], w[1], w[2]).Determinant();
 
-			float i = Matrix33(x.y, x.z, x.w, y.y, y.z, y.w, w.y, w.z, w.w).Determinant();
-			float j = Matrix33(x.x, x.z, x.w, y.x, y.z, y.w, w.x, w.z, w.w).Determinant();
-			float k = Matrix33(x.x, x.y, x.w, y.x, y.y, y.w, w.x, w.y, w.w).Determinant();
-			float l = Matrix33(x.x, x.y, x.z, y.x, y.y, y.z, w.x, w.y, w.z).Determinant();
+			Primitive i = Matrix33(x[1], x[2], x[3], y[1], y[2], y[3], w[1], w[2], w[3]).Determinant();
+			Primitive j = Matrix33(x[0], x[2], x[3], y[0], y[2], y[3], w[0], w[2], w[3]).Determinant();
+			Primitive k = Matrix33(x[0], x[1], x[3], y[0], y[1], y[3], w[0], w[1], w[3]).Determinant();
+			Primitive l = Matrix33(x[0], x[1], x[2], y[0], y[1], y[2], w[0], w[1], w[2]).Determinant();
 
-			float m = Matrix33(x.y, x.z, x.w, y.y, y.z, y.w, z.y, z.z, z.w).Determinant();
-			float n = Matrix33(x.x, x.z, x.w, y.x, y.z, y.w, z.x, z.z, z.w).Determinant();
-			float o = Matrix33(x.x, x.y, x.w, y.x, y.y, y.w, z.x, z.y, z.w).Determinant();
-			float p = Matrix33(x.x, x.y, x.z, y.x, y.y, y.z, z.x, z.y, z.z).Determinant();
+			Primitive m = Matrix33(x[1], x[2], x[3], y[1], y[2], y[3], z[1], z[2], z[3]).Determinant();
+			Primitive n = Matrix33(x[0], x[2], x[3], y[0], y[2], y[3], z[0], z[2], z[3]).Determinant();
+			Primitive o = Matrix33(x[0], x[1], x[3], y[0], y[1], y[3], z[0], z[1], z[3]).Determinant();
+			Primitive p = Matrix33(x[0], x[1], x[2], y[0], y[1], y[2], z[0], z[1], z[2]).Determinant();
 
 			return Matrix44(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p);
 		}
@@ -280,7 +281,7 @@ namespace QuickMath
 		 */
 		Matrix44 Inverse() const
 		{
-			float a = 1.0f / Determinant();
+			Primitive a = Primitive(1) / Determinant();
 			return Adjugate() * a;
 		}
 
@@ -298,4 +299,8 @@ namespace QuickMath
 			};
 		};
 	};
+
+	typedef Matrix44<float>		Matrix44f;
+	typedef Matrix44<int>		Matrix44i;
+	typedef Matrix44<double>	Matrix44d;
 }

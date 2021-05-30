@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "../Vector/TVector.h"
+
 namespace QuickMath
 {
 	/**
