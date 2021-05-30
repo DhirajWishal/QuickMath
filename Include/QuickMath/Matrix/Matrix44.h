@@ -36,7 +36,7 @@ namespace QuickMath
 		 * @param vec3: Vector three.
 		 * @param vec4: Vector four.
 		 */
-		Matrix44(Vector4 vec1, Vector4 vec2, Vector4 vec3, Vector4 vec4) : r(vec1), g(vec2), b(vec3), a(vec4) {}
+		Matrix44(const Vector4& vec1, const Vector4& vec2, const Vector4& vec3, const Vector4& vec4) : r(vec1), g(vec2), b(vec3), a(vec4) {}
 
 		/**
 		 * Construct the matrix using individual values.
@@ -159,12 +159,7 @@ namespace QuickMath
 		 */
 		Vector4 operator*(const Vector4& other)
 		{
-			return {
-				(r[0] * other[0]) + (r[1] * other[1]) + (r[2] * other[2]) + (r[3] * other[3]),
-				(g[0] * other[0]) + (g[1] * other[1]) + (g[2] * other[2]) + (g[3] * other[3]),
-				(b[0] * other[0]) + (b[1] * other[1]) + (b[2] * other[2]) + (b[3] * other[3]),
-				(a[0] * other[0]) + (a[1] * other[1]) + (a[2] * other[2]) + (a[3] * other[3])
-			};
+			return (Vector4(r.x, g.x, b.x, a.x) * other.x) + (Vector4(r.y, g.y, b.y, a.y) * other.y) + (Vector4(r.z, g.z, b.z, a.z) * other.z) + (Vector4(r.w, g.w, b.w, a.w) * other.w);
 		}
 
 		/**

@@ -28,7 +28,7 @@ namespace QuickMath
 		 * @param vec1: Vector one.
 		 * @param vec2: Vector two.
 		 */
-		Matrix22(Vector2 vec1, Vector2 vec2) : x(vec1), y(vec2) {}
+		Matrix22(const Vector2& vec1, const Vector2& vec2) : x(vec1), y(vec2) {}
 
 		/**
 		 * Construct the matrix by setting individual values.

@@ -34,7 +34,7 @@ namespace QuickMath
 		 * @param vec2: Vector two.
 		 * @param vec3: Vector three.
 		 */
-		Matrix33(Vector3 vec1, Vector3 vec2, Vector3 vec3) : r(vec1), g(vec2), b(vec3) {}
+		Matrix33(const Vector3& vec1, const Vector3& vec2, const Vector3& vec3) : r(vec1), g(vec2), b(vec3) {}
 
 		/**
 		 * Construct the matrix using individual values.
@@ -147,11 +147,7 @@ namespace QuickMath
 		 */
 		Vector3 operator*(const Vector3& other)
 		{
-			return {
-				(r[0] * other[0]) + (r[1] * other[1]) + (r[2] * other[2]),
-				(g[0] * other[0]) + (g[1] * other[1]) + (g[2] * other[2]),
-				(b[0] * other[0]) + (b[1] * other[1]) + (b[2] * other[2])
-			};
+			return (Vector3(r.x, g.x, b.x) * other.x) + (Vector3(r.y, g.y, b.y) * other.y) + (Vector3(r.z, g.z, b.z) * other.z);
 		}
 
 		/**
