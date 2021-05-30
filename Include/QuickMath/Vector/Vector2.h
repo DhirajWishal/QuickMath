@@ -67,7 +67,7 @@ namespace QuickMath
 		 */
 		const Primitive operator[](unsigned int index) const
 		{
-			return (operator const Primitive* ())[index];
+			return (operator const Primitive * ())[index];
 		}
 
 		/**
@@ -78,7 +78,7 @@ namespace QuickMath
 		 */
 		Primitive& operator[](unsigned int index)
 		{
-			return const_cast<Primitive&>((operator const Primitive* ())[index]);
+			return const_cast<Primitive&>((operator const Primitive * ())[index]);
 		}
 
 		/**

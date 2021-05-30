@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../IncludeSIMD.h"
+#include "../Operators.h"
 #include <initializer_list>
 #include <algorithm>
 

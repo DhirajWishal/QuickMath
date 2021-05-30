@@ -26,25 +26,49 @@ namespace QuickMath
 	 * Intrinsic traits for float vector 2.
 	 */
 	template<>
-	struct IntrinsicTraits<float, 2> { typedef __m64 Type; };
+	struct IntrinsicTraits<float, 2>
+	{
+		typedef __m64 Type;
+
+		static float& At(Type& storage, unsigned int index) { return storage.m64_f32[index]; }
+		static const float At(const Type& storage, unsigned int index) { return storage.m64_f32[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for float vector 3.
 	 */
 	template<>
-	struct IntrinsicTraits<float, 3> { typedef __m128 Type; };
+	struct IntrinsicTraits<float, 3>
+	{
+		typedef __m128 Type;
+
+		static float& At(Type& storage, unsigned int index) { return storage.m128_f32[index]; }
+		static const float At( const Type& storage, unsigned int index) { return storage.m128_f32[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for float vector 4.
 	 */
 	template<>
-	struct IntrinsicTraits<float, 4> { typedef __m128 Type; };
+	struct IntrinsicTraits<float, 4>
+	{
+		typedef __m128 Type;
+
+		static float& At(Type& storage, unsigned int index) { return storage.m128_f32[index]; }
+		static const float At(const Type& storage, unsigned int index) { return storage.m128_f32[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for float vector 8.
 	 */
 	template<>
-	struct IntrinsicTraits<float, 8> { typedef __m256 Type; };
+	struct IntrinsicTraits<float, 8>
+	{
+		typedef __m256 Type;
+
+		static float& At(Type& storage, unsigned int index) { return storage.m256_f32[index]; }
+		static const float At(const Type& storage, unsigned int index) { return storage.m256_f32[index]; }
+	};
 
 	/** Int Intrinsic Types */
 
@@ -52,25 +76,49 @@ namespace QuickMath
 	 * Intrinsic traits for int vector 2.
 	 */
 	template<>
-	struct IntrinsicTraits<int, 2> { typedef __m64 Type; };
+	struct IntrinsicTraits<int, 2>
+	{
+		typedef __m64 Type;
+
+		static int& At(Type& storage, unsigned int index) { return storage.m64_i32[index]; }
+		static const int At(const Type& storage, unsigned int index) { return storage.m64_i32[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for int vector 3.
 	 */
 	template<>
-	struct IntrinsicTraits<int, 3> { typedef __m128 Type; };
+	struct IntrinsicTraits<int, 3>
+	{
+		typedef __m128i Type;
+
+		static int& At(Type& storage, unsigned int index) { return storage.m128i_i32[index]; }
+		static const int At(const Type& storage, unsigned int index) { return storage.m128i_i32[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for int vector 4.
 	 */
 	template<>
-	struct IntrinsicTraits<int, 4> { typedef __m128 Type; };
+	struct IntrinsicTraits<int, 4>
+	{
+		typedef __m128i Type;
+
+		static int& At(Type& storage, unsigned int index) { return storage.m128i_i32[index]; }
+		static const int At(const Type& storage, unsigned int index) { return storage.m128i_i32[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for int vector 8.
 	 */
 	template<>
-	struct IntrinsicTraits<int, 8> { typedef __m256i Type; };
+	struct IntrinsicTraits<int, 8>
+	{
+		typedef __m256i Type;
+
+		static int& At(Type& storage, unsigned int index) { return storage.m256i_i32[index]; }
+		static const int At(const Type& storage, unsigned int index) { return storage.m256i_i32[index]; }
+	};
 
 	/** Double Intrinsic Types */
 
@@ -78,23 +126,47 @@ namespace QuickMath
 	 * Intrinsic traits for double vector 2.
 	 */
 	template<>
-	struct IntrinsicTraits<double, 2> { typedef __m128d Type; };
+	struct IntrinsicTraits<double, 2>
+	{
+		typedef __m128d Type;
+
+		static double& At(Type& storage, unsigned int index) { return storage.m128d_f64[index]; }
+		static const double At(const Type& storage, unsigned int index) { return storage.m128d_f64[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for double vector 3.
 	 */
 	template<>
-	struct IntrinsicTraits<double, 3> { typedef __m256d Type; };
+	struct IntrinsicTraits<double, 3>
+	{
+		typedef __m256d Type;
+
+		static double& At(Type& storage, unsigned int index) { return storage.m256d_f64[index]; }
+		static const double At(const Type& storage, unsigned int index) { return storage.m256d_f64[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for double vector 4.
 	 */
 	template<>
-	struct IntrinsicTraits<double, 4> { typedef __m256d Type; };
+	struct IntrinsicTraits<double, 4>
+	{
+		typedef __m256d Type;
+
+		static double& At(Type& storage, unsigned int index) { return storage.m256d_f64[index]; }
+		static const double At(const Type& storage, unsigned int index) { return storage.m256d_f64[index]; }
+	};
 
 	/**
 	 * Intrinsic traits for double vector 8.
 	 */
 	template<>
-	struct IntrinsicTraits<double, 8> { typedef __m512d Type; };
+	struct IntrinsicTraits<double, 8>
+	{
+		typedef __m512d Type;
+
+		static double& At(Type& storage, unsigned int index) { return storage.m512d_f64[index]; }
+		static const double At(const Type& storage, unsigned int index) { return storage.m512d_f64[index]; }
+	};
 }

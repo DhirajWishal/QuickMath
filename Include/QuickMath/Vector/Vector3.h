@@ -6,6 +6,7 @@
 
 namespace QuickMath
 {
+	using namespace Operators;
 	/**
 	 * Basic 3D Vector for QuickMath.
 	 * This class uses SIMD to carry out the necessary calculations.
@@ -350,7 +351,7 @@ namespace QuickMath
 		 */
 		bool operator||(const Vector3& other) const
 		{
-			Vector3 vec = std::move(_mm_or_ps(*this, other));
+			Vector3 vec = intrinsic || other.intrinsic;
 			return ((vec.r) && (vec.g) && (vec.b) && (vec.a));
 		}
 
