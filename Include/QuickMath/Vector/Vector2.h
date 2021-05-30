@@ -9,17 +9,18 @@ namespace QuickMath
 	/**
 	 * The 2D vector of QuickMath.
 	 */
-	class Vector2 final : public Vector<Vector2, float>
+	template<class Primitive = float>
+	class Vector2 final : public Vector<Vector2<Primitive>, Primitive>
 	{
 	public:
-		Vector2() : x(0.0f), y(0.0f) {}
+		Vector2() : x(Primitive()), y(Primitive()) {}
 
 		/**
 		 * Construct using one value which will be set to all (x, y)/ (a, b)/ (width, height).
 		 *
 		 * @param value: The value to be set with.
 		 */
-		Vector2(float value) : x(value), y(value) {}
+		Vector2(Primitive value) : x(value), y(value) {}
 
 		/**
 		 * Set values to the stored data.
@@ -27,7 +28,7 @@ namespace QuickMath
 		 * @param value1: Value to be set to x/ a/ width.
 		 * @param value2: Value to be set to y/ b/ height.
 		 */
-		Vector2(float value1, float value2) : x(value1), y(value2) {}
+		Vector2(Primitive value1, Primitive value2) : x(value1), y(value2) {}
 
 		/**
 		 * Set data to the vector using an initializer list.
@@ -35,7 +36,7 @@ namespace QuickMath
 		 *
 		 * @param list: The initializer list.
 		 */
-		Vector2(const std::initializer_list<float>& list) : x(0.0f), y(0.0f)
+		Vector2(const std::initializer_list<Primitive>& list) : x(Primitive()), y(Primitive())
 		{
 			if ((list.size() > 2) || (list.size() < 2))
 				return;
@@ -49,7 +50,7 @@ namespace QuickMath
 		 * @param list: The initializer list.
 		 * @return The data added vector (this).
 		 */
-		Vector2 operator=(const std::initializer_list<float>& list)
+		Vector2 operator=(const std::initializer_list<Primitive>& list)
 		{
 			if ((list.size() > 2) || (list.size() < 2))
 				return {};
@@ -64,9 +65,9 @@ namespace QuickMath
 		 * @param index: The index of the data to be accessed.
 		 * @return Float value at the index.
 		 */
-		const float operator[](unsigned int index) const
+		const Primitive operator[](unsigned int index) const
 		{
-			return (operator const float* ())[index];
+			return (operator const Primitive* ())[index];
 		}
 
 		/**
@@ -75,9 +76,9 @@ namespace QuickMath
 		 * @param index: The index of the data to be accessed.
 		 * @return Float value at the index.
 		 */
-		float& operator[](unsigned int index)
+		Primitive& operator[](unsigned int index)
 		{
-			return const_cast<float&>((operator const float* ())[index]);
+			return const_cast<Primitive&>((operator const Primitive* ())[index]);
 		}
 
 		/**
@@ -85,7 +86,7 @@ namespace QuickMath
 		 *
 		 * @return The pointer of the first element.
 		 */
-		operator float* ()
+		operator Primitive* ()
 		{
 			return &x;
 		}
@@ -95,7 +96,7 @@ namespace QuickMath
 		 *
 		 * @return The pointer of the first element.
 		 */
-		operator const float* () const
+		operator const Primitive* () const
 		{
 			return &x;
 		}
@@ -150,7 +151,7 @@ namespace QuickMath
 		 * @param value: RHS value.
 		 * @return The calculated vector.
 		 */
-		Vector2 operator+(const float& value) const
+		Vector2 operator+(const Primitive& value) const
 		{
 			return *this + Vector2(value);
 		}
@@ -161,7 +162,7 @@ namespace QuickMath
 		 * @param value: RHS value.
 		 * @return The calculated vector.
 		 */
-		Vector2 operator-(const float& value) const
+		Vector2 operator-(const Primitive& value) const
 		{
 			return *this - Vector2(value);
 		}
@@ -172,7 +173,7 @@ namespace QuickMath
 		 * @param value: RHS value.
 		 * @return The calculated vector.
 		 */
-		Vector2 operator*(const float& value) const
+		Vector2 operator*(const Primitive& value) const
 		{
 			return *this * Vector2(value);
 		}
@@ -183,7 +184,7 @@ namespace QuickMath
 		 * @param value: RHS value.
 		 * @return The calculated vector.
 		 */
-		Vector2 operator/(const float& value) const
+		Vector2 operator/(const Primitive& value) const
 		{
 			return *this / Vector2(value);
 		}
@@ -312,18 +313,24 @@ namespace QuickMath
 		{
 			struct
 			{
-				float x, y;
+				Primitive x, y;
 			};
 
 			struct
 			{
-				float a, b;
+				Primitive a, b;
 			};
 
 			struct
 			{
-				float width, height;
+				Primitive width, height;
 			};
+
+			IntrinsicTraits<Primitive, 2>::Type intrinsic;
 		};
 	};
+
+	typedef Vector2<float>	Vector2f;
+	typedef Vector2<double> Vector2d;
+	typedef Vector2<int>	Vector2i;
 }

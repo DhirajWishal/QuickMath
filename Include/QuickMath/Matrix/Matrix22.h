@@ -83,7 +83,7 @@ namespace QuickMath
 		 * @param other: The other matrix.
 		 * @return The new matrix.
 		 */
-		Matrix22 operator+(const Matrix22& other)
+		Matrix22 operator+(const Matrix22& other) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
 			newMatrix.x = x + other.x;
@@ -98,7 +98,7 @@ namespace QuickMath
 		 * @param other: The other matrix.
 		 * @return The new matrix.
 		 */
-		Matrix22 operator-(const Matrix22& other)
+		Matrix22 operator-(const Matrix22& other) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
 			newMatrix.x = x - other.x;
@@ -113,7 +113,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix22 operator*(const float& value)
+		Matrix22 operator*(const float& value) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
 			newMatrix.r = r * value;
@@ -129,9 +129,9 @@ namespace QuickMath
 		 * @param other: The vector 2D.
 		 * @return The multiplied vector 2D.
 		 */
-		Vector2 operator*(const Vector2& other)
+		Vector2 operator*(const Vector2& other) const
 		{
-			return { (r[0] * other[0]) + (r[1] * other[1]), (g[0] * other[0]) + (g[1] * other[1]) };
+			return { (r.x * other.x) + (r.y * other.y), (g.x * other.x) + (g.y * other.y) };
 		}
 
 		/**
@@ -140,11 +140,11 @@ namespace QuickMath
 		 * @param other: The other matrix to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix22 operator*(const Matrix22& other)
+		Matrix22 operator*(const Matrix22& other) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
-			newMatrix.r = (x * other[0][0]) + (y * other[0][1]);
-			newMatrix.g = (x * other[1][0]) + (y * other[1][1]);
+			newMatrix.r = (x * other.x.x) + (y * other.x.y);
+			newMatrix.g = (x * other.y.x) + (y * other.y.y);
 
 			return newMatrix;
 		}
@@ -155,7 +155,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The divided matrix.
 		 */
-		Matrix22 operator/(const float& value)
+		Matrix22 operator/(const float& value) const
 		{
 			Matrix22 newMatrix = Matrix22::Identity;
 			newMatrix.r = r / value;
@@ -165,13 +165,35 @@ namespace QuickMath
 		}
 
 		/**
+		 * Get a row from the matrix.
+		 *
+		 * @param index: The index of the column.
+		 * @return The row vector.
+		 */
+		Vector2 Row(unsigned int index) const
+		{
+			return operator [](index);
+		}
+
+		/**
+		 * Get a column from the matrix.
+		 *
+		 * @param index: The index of the column.
+		 * @return The column vector.
+		 */
+		Vector2 Column(unsigned int index) const
+		{
+			return Vector2(r[index], g[index]);
+		}
+
+		/**
 		 * Get the transposed matrix of this.
 		 *
 		 * @return The transposed matrix.
 		 */
 		Matrix22 Transpose() const
 		{
-			return Matrix22(x.x, y.x, x.y, y.y);
+			return Matrix22(Column(0), Column(1));
 		}
 
 		/**

@@ -107,7 +107,7 @@ namespace QuickMath
 		 * @param other: The other matrix.
 		 * @return The new matrix.
 		 */
-		Matrix44 operator+(const Matrix44& other)
+		Matrix44 operator+(const Matrix44& other) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
 			newMatrix.x = x + other.x;
@@ -123,7 +123,7 @@ namespace QuickMath
 		 * @param other: The other matrix.
 		 * @return The new matrix.
 		 */
-		Matrix44 operator-(const Matrix44& other)
+		Matrix44 operator-(const Matrix44& other) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
 			newMatrix.x = x - other.x;
@@ -139,7 +139,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix44 operator*(const float& value)
+		Matrix44 operator*(const float& value) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
 			newMatrix.r = r * value;
@@ -157,7 +157,7 @@ namespace QuickMath
 		 * @param other: The vector 4D.
 		 * @return The multiplied vector 4D.
 		 */
-		Vector4 operator*(const Vector4& other)
+		Vector4 operator*(const Vector4& other) const
 		{
 			return (Vector4(r.x, g.x, b.x, a.x) * other.x) + (Vector4(r.y, g.y, b.y, a.y) * other.y) + (Vector4(r.z, g.z, b.z, a.z) * other.z) + (Vector4(r.w, g.w, b.w, a.w) * other.w);
 		}
@@ -168,13 +168,13 @@ namespace QuickMath
 		 * @param other: The other matrix to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix44 operator*(const Matrix44& other)
+		Matrix44 operator*(const Matrix44& other) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
-			newMatrix.r = (r * other[0][0]) + (g * other[0][1]) + (b * other[0][2]) + (a * other[0][3]);
-			newMatrix.g = (r * other[1][0]) + (g * other[1][1]) + (b * other[1][2]) + (a * other[1][3]);
-			newMatrix.b = (r * other[2][0]) + (g * other[2][1]) + (b * other[2][2]) + (a * other[2][3]);
-			newMatrix.a = (r * other[3][0]) + (g * other[3][1]) + (b * other[3][2]) + (a * other[3][3]);
+			newMatrix.r = (r * other.x.x) + (g * other.x.y) + (b * other.x.z) + (a * other.x.w);
+			newMatrix.g = (r * other.y.x) + (g * other.y.y) + (b * other.y.z) + (a * other.y.w);
+			newMatrix.b = (r * other.z.x) + (g * other.z.y) + (b * other.z.z) + (a * other.z.w);
+			newMatrix.a = (r * other.w.x) + (g * other.w.y) + (b * other.w.z) + (a * other.w.w);
 
 			return newMatrix;
 		}
@@ -185,7 +185,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The divided matrix.
 		 */
-		Matrix44 operator/(const float& value)
+		Matrix44 operator/(const float& value) const
 		{
 			Matrix44 newMatrix = Matrix44::Identity;
 			newMatrix.r = r / value;
@@ -197,13 +197,35 @@ namespace QuickMath
 		}
 
 		/**
+		 * Get a row from the matrix.
+		 *
+		 * @param index: The index of the column.
+		 * @return The row vector.
+		 */
+		Vector4 Row(unsigned int index) const
+		{
+			return operator [](index);
+		}
+
+		/**
+		 * Get a column from the matrix.
+		 *
+		 * @param index: The index of the column.
+		 * @return The column vector.
+		 */
+		Vector4 Column(unsigned int index) const
+		{
+			return Vector4(r[index], g[index], b[index], a[index]);
+		}
+
+		/**
 		 * Get the transposed matrix of this.
 		 *
 		 * @return The transposed matrix.
 		 */
 		Matrix44 Transpose() const
 		{
-			return Matrix44(x.x, y.x, z.x, w.x, x.y, y.y, z.y, w.y, x.z, y.z, z.z, w.z, x.w, y.w, z.w, w.w);
+			return Matrix44(Column(0), Column(1), Column(2), Column(3));
 		}
 
 		/**

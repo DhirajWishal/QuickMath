@@ -96,7 +96,7 @@ namespace QuickMath
 		 * @param other: The other matrix.
 		 * @return The new matrix.
 		 */
-		Matrix33 operator+(const Matrix33& other)
+		Matrix33 operator+(const Matrix33& other) const
 		{
 			Matrix33 newMatrix = Matrix33::Identity;
 			newMatrix.x = x + other.x;
@@ -112,7 +112,7 @@ namespace QuickMath
 		 * @param other: The other matrix.
 		 * @return The new matrix.
 		 */
-		Matrix33 operator-(const Matrix33& other)
+		Matrix33 operator-(const Matrix33& other) const
 		{
 			Matrix33 newMatrix = Matrix33::Identity;
 			newMatrix.x = x - other.x;
@@ -128,7 +128,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix33 operator*(const float& value)
+		Matrix33 operator*(const float& value) const
 		{
 			Matrix33 newMatrix = Matrix33::Identity;
 			newMatrix.r = r * value;
@@ -145,9 +145,9 @@ namespace QuickMath
 		 * @param other: The vector 3D.
 		 * @return The multiplied vector 3D.
 		 */
-		Vector3 operator*(const Vector3& other)
+		Vector3 operator*(const Vector3& other) const
 		{
-			return (Vector3(r.x, g.x, b.x) * other.x) + (Vector3(r.y, g.y, b.y) * other.y) + (Vector3(r.z, g.z, b.z) * other.z);
+			return (Column(0) * other.x) + (Column(1) * other.y) + (Column(2) * other.z);
 		}
 
 		/**
@@ -156,12 +156,12 @@ namespace QuickMath
 		 * @param other: The other matrix to be multiplied with.
 		 * @return The multiplied matrix.
 		 */
-		Matrix33 operator*(const Matrix33& other)
+		Matrix33 operator*(const Matrix33& other) const
 		{
 			Matrix33 newMatrix = Matrix33::Identity;
-			newMatrix.r = (r * other[0][0]) + (g * other[0][1]) + (b * other[0][2]);
-			newMatrix.g = (r * other[1][0]) + (g * other[1][1]) + (b * other[1][2]);
-			newMatrix.b = (r * other[2][0]) + (g * other[2][1]) + (b * other[2][2]);
+			newMatrix.r = (r * other.x.x) + (g * other.x.y) + (b * other.x.z);
+			newMatrix.g = (r * other.y.x) + (g * other.y.y) + (b * other.y.z);
+			newMatrix.b = (r * other.z.x) + (g * other.z.y) + (b * other.z.z);
 
 			return newMatrix;
 		}
@@ -172,7 +172,7 @@ namespace QuickMath
 		 * @param value: The value to be multiplied with.
 		 * @return The divided matrix.
 		 */
-		Matrix33 operator/(const float& value)
+		Matrix33 operator/(const float& value) const
 		{
 			Matrix33 newMatrix = Matrix33::Identity;
 			newMatrix.r = r / value;
@@ -183,13 +183,35 @@ namespace QuickMath
 		}
 
 		/**
+		 * Get a row from the matrix.
+		 *
+		 * @param index: The index of the column.
+		 * @return The row vector.
+		 */
+		Vector3 Row(unsigned int index) const
+		{
+			return operator [](index);
+		}
+
+		/**
+		 * Get a column from the matrix.
+		 *
+		 * @param index: The index of the column.
+		 * @return The column vector.
+		 */
+		Vector3 Column(unsigned int index) const
+		{
+			return Vector3(r[index], g[index], b[index]);
+		}
+
+		/**
 		 * Get the transposed matrix of this.
 		 *
 		 * @return The transposed matrix.
 		 */
 		Matrix33 Transpose() const
 		{
-			return Matrix33(x.x, y.x, z.x, x.y, y.y, z.y, x.z, y.z, z.z);
+			return Matrix33(Column(0), Column(1), Column(2));
 		}
 
 		/**

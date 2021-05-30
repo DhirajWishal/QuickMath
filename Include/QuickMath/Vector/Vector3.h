@@ -362,7 +362,7 @@ namespace QuickMath
 		 */
 		bool operator^(const Vector3& other) const
 		{
-			Vector3 vec = std::move(_mm_or_ps(*this, other));
+			Vector3 vec = std::move(_mm_xor_ps(*this, other));
 			return ((vec.r) && (vec.g) && (vec.b) && (vec.a));
 		}
 
